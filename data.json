@@ -10,7 +10,7 @@
                 4,3,4,7,3,5,
                 4,3,4,7,3,5],
         "unit": "hours",
-        "type": "line",
+        "type": "area",
         "valueDecimals": 1
     }, {
         "name": "Calories",

@@ -1,13 +1,47 @@
+.nav {
+	position: fixed;
+	width: 200px;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: #354a60;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+
+.sidebar { 
+	text-align: left;
+	padding: 0px 15px;
+}
+
+.patient_image {
+	width: 120px;
+	margin-top: 50px;
+}
+
+.patient_info {
+	font-family: "Open Sans";
+	color: white;
+	font-size: 12px;
+}
+
+.patient_name {
+	font-size: 16px;
+}
+
 .chart {
     width: 44%;
-    height: 300px;
-    padding-top: 1%;
-    margin-left: 2%;
+    height: 350px;
+    margin-left: 3%;
+    padding-top: 2%
 }
 
 #container {
-  display: flex;
-  flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
+	margin-left: 200px;
 }
 
 
