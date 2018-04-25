@@ -6,6 +6,9 @@ mouse/touch event handler to bind the charts together.
 */
 
 
+// ****** CHANGE PATIENT HERE TO INDICATE PROFILE OF CHOICE ********
+var PATIENT = "patient2";
+
 
 /**
  * In order to synchronize tooltips and crosshairs, override the
@@ -86,10 +89,14 @@ function syncExtremes(e) {
     }
 }
 
+var jsonFile = "patient_data/" + PATIENT + ".json";
+var sidebarPath = "partials/" + PATIENT + ".html";
+$("#sidebar").load(sidebarPath); 
+
 // Get the data. The contents of the data file can be viewed at
 $.getJSON(
     // 'https://cdn.rawgit.com/highcharts/highcharts/057b672172ccc6c08fe7dbb27fc17ebca3f5b770/samples/data/activity.json',
-    "data.json",
+    jsonFile,
     function (activity) {
         $.each(activity.datasets, function (i, dataset) {
 
@@ -135,7 +142,7 @@ $.getJSON(
                     rangeSelector: {
                     	enabled: enabled,
                     	floating: true,
-			            y: -90,
+			            y: -120,
 			            verticalAlign: 'top',
                     	buttons: [{
 						    type: 'week',
@@ -193,7 +200,7 @@ $.getJSON(
                         headerFormat: '',
                         shadow: false,
                         style: {
-                            fontSize: '18px'
+                            fontSize: '16px'
                         },
                         valueDecimals: dataset.valueDecimals
                     },
