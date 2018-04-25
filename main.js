@@ -91,6 +91,7 @@ function syncExtremes(e) {
 
 var jsonFile = "patient_data/" + PATIENT + ".json";
 var sidebarPath = "partials/" + PATIENT + ".html";
+
 $("#sidebar").load(sidebarPath); 
 
 // Get the data. The contents of the data file can be viewed at
