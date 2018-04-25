@@ -20,7 +20,16 @@
                 800,680,740,550,880,460],
         "unit": "calories",
         "type": "line",
-        "valueDecimals": 0
+        "valueDecimals1": 0,
+        "name1": "Weight",
+        "data1": [100,280,240,250,280,260,
+                200,280,240,250,280,260,
+                200,280,240,250,280,260,
+                200,280,240,250,280,260],
+        "unit1": "lbs",
+        "type1": "line",
+        "valueDecimals1": 0,
+        "dual": true
     }, {
         "name": "Pain",
         "data": [2,2,4,3,7,6,
