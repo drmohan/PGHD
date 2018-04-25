@@ -14,6 +14,7 @@ mouse/touch event handler to bind the charts together.
     $('#container').bind('mousemove touchmove touchstart', function(e) {
         var chart,
             point,
+            point1,
             i;
             
         // Find coordinates within the chart. In case charts are side by side,
@@ -28,7 +29,16 @@ mouse/touch event handler to bind the charts together.
         for (i = 0; i < Highcharts.charts.length; i = i + 1) {
             chart = Highcharts.charts[i];
             point = chart.series[0].searchPoint(e, true); // Get the hovered point
-            if (point) {
+            if (chart.series[1]) {
+                point1 = chart.series[1].searchPoint(e, true); // Get the hovered point
+            }
+            if (point && point1){
+                point.onMouseOver(); // Show the hover marker
+                point1.onMouseOver(); // Show the hover marker
+                chart.tooltip.refresh([point,point1]); // Show the tooltip
+                chart.xAxis[0].drawCrosshair(e, point); // Show the crosshair
+                chart.xAxis[0].drawCrosshair(e, point1); // Show the crosshair
+            } else if (point){
                 point.onMouseOver(); // Show the hover marker
                 chart.tooltip.refresh(point); // Show the tooltip
                 chart.xAxis[0].drawCrosshair(e, point); // Show the crosshair
@@ -84,7 +94,7 @@ $.getJSON(
         $.each(activity.datasets, function (i, dataset) {
 
         	var enabled;
-        	if(i == 0 ) {
+        	if (i == 0) {
         		enabled = true;
         	} else {
         		enabled = false;
@@ -95,13 +105,20 @@ $.getJSON(
                 return [Date.parse(activity.xData[j]), val];
             });
 
+            if (dataset.data1) {
+                dataset.data1 = Highcharts.map(dataset.data1, function (val, j) {
+                    return [Date.parse(activity.xData[j]), val];
+                });
+            }
+            
+
             $('<div class="chart">')
                 .appendTo('#container')
                 .highcharts({
                     chart: {
                         marginLeft: 60, // Keep all charts left aligned
-                        spacingTop: 70,
-                        spacingBottom: 40,
+                        spacingTop: 90,
+                        spacingBottom: 0,
                         style: {
                             fontFamily: 'Open Sans'
                         }
@@ -109,7 +126,7 @@ $.getJSON(
                     title: {
                         text: dataset.name,
                         align: 'left',
-                        margin: 0,
+                        margin: 15,
                         x: 50,
                         style: {
                             fontWeight: 'bold'
@@ -138,7 +155,7 @@ $.getJSON(
                         enabled: false
                     },
                     legend: {
-                        enabled: false
+                        enabled: dataset.dual
                     },
                     xAxis: {
                         crosshair: true,
@@ -150,22 +167,29 @@ $.getJSON(
 						   	format: '{value:%m/%d}'
 	                	},
 	                },
-                    yAxis: {
+                    yAxis: [{
                         title: {
-                            text: dataset.unit
+                            text: dataset.name
                         }
-                    },
+                    }, {
+                        title: {
+                            text: dataset.name1 || null
+                        },
+                        opposite: true
+                    }],
                     tooltip: {
                         positioner: function () {
                             return {
                                 // right aligned
-                                x: this.chart.chartWidth - this.label.width,
-                                y: 60 // align to title
+                                // x: this.chart.chartWidth - this.label.width,
+                                x: this.chart.chartWidth - this.label.width - 40, 
+                                y: dataset.dual ? 60 : 80 // align to title
                             };
                         },
+                        shared: dataset.dual,
                         borderWidth: 0,
                         backgroundColor: 'none',
-                        pointFormat: '{point.y}',
+                        pointFormat: '<tr><td>{point.y}</td></tr><br/>',
                         headerFormat: '',
                         shadow: false,
                         style: {
@@ -181,8 +205,20 @@ $.getJSON(
                         fillOpacity: 0.3,
                         tooltip: {
                             valueSuffix: ' ' + dataset.unit
-                        }
-                    }]
+                        },
+                        yAxis: 0,
+                    },
+                    {
+                        data: dataset.data1,
+                        name: dataset.name1,
+                        type: dataset.type1,
+                        color: Highcharts.getOptions().colors[i],
+                        fillOpacity: 0.3,
+                        tooltip: {
+                            valueSuffix: ' ' + dataset.unit1
+                        },
+                         yAxis: 1,
+                    }] 
                 });
         });
     }
