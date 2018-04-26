@@ -227,7 +227,22 @@ $.getJSON(
                         },
                          yAxis: 1,
                     }] 
+                }, function (chart) {
+
+                    // apply the date pickers
+                    setTimeout(function () {
+                        $('input.highcharts-range-selector', $(chart.container).parent())
+                            .datepicker();
+                    }, 0);
                 });
         });
     }
 );
+
+$.datepicker.setDefaults({
+    dateFormat: 'yy-mm-dd',
+    onSelect: function () {
+        this.onchange();
+        this.onblur();
+    }
+});
