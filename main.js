@@ -118,6 +118,15 @@ $.getJSON(
                     return [Date.parse(activity.xData[j]), val];
                 });
             }
+
+            var status_dots = {
+                'green': 'http://www.clker.com/cliparts/r/M/L/o/R/i/green-dot.svg.med.png', 
+                'yellow': 'http://www.clker.com/cliparts/o/b/y/x/Z/c/yellow-dot-md.png',
+                'red': 'http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png'
+            }
+
+            var statuses = Object.keys(status_dots)
+            var metric_status = status_dots[statuses[statuses.length * Math.random() << 0]];
             
 
             $('<div class="chart">')
@@ -132,12 +141,11 @@ $.getJSON(
                         }
                     },
                     title: {
-                        text: dataset.name,
+                        useHTML: true,
+                        text: "<div class='title_bar'><div class='title'>" + dataset.name + "</div><img class='status' src='"+ metric_status +"'/></div>",
                         align: 'left',
-                        margin: 15,
                         x: 50,
                         style: {
-                            fontWeight: 'bold'
                         }
                     },
                     rangeSelector: {
@@ -189,7 +197,6 @@ $.getJSON(
                         positioner: function () {
                             return {
                                 // right aligned
-                                // x: this.chart.chartWidth - this.label.width,
                                 x: this.chart.chartWidth - this.label.width - 40, 
                                 y: dataset.dual ? 60 : 80 // align to title
                             };
