@@ -34,13 +34,35 @@
 
 .chart {
     width: 44%;
-    height: 350px;
+    height: 330px;
     margin-left: 3%;
-    padding-top: 1%
+    padding-top: 1%;
+
 }
 
 #container {
 	display: flex;
 	flex-wrap: wrap;
 	margin-left: 200px;
+}
+
+.title_bar {
+	background-color: #354a60;
+	color: white;
+	width: 150px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.title {
+	margin-left: 10px;
+	text-transform: uppercase;
+	font-size: 15px;
+}
+
+.status { 
+	width: 8%;
+	margin-right: 10px;
 }
