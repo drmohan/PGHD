@@ -66,3 +66,8 @@
 	width: 8%;
 	margin-right: 10px;
 }
+
+.tooltip {
+	display:inline;
+	margin-right:6px;
+}

@@ -18,6 +18,7 @@ var PATIENT = "patient2";
         var chart,
             point,
             point1,
+            point2,
             i;
             
         // Find coordinates within the chart. In case charts are side by side,
@@ -35,7 +36,21 @@ var PATIENT = "patient2";
             if (chart.series[1]) {
                 point1 = chart.series[1].searchPoint(e, true); // Get the hovered point
             }
-            if (point && point1){
+
+            if (chart.series[2]) {
+                point2 = chart.series[2].searchPoint(e, true); // Get the hovered point
+            }
+            if (point && point1 && point2){
+                point.onMouseOver(); // Show the hover marker
+                point1.onMouseOver(); // Show the hover marker
+                point2.onMouseOver(); // Show the hover marker
+                 
+                chart.tooltip.refresh([point,point1,point2]); // Show the tooltip
+                chart.xAxis[0].drawCrosshair(e, point); // Show the crosshair
+                chart.xAxis[0].drawCrosshair(e, point1); // Show the crosshair
+                chart.xAxis[0].drawCrosshair(e, point2); // Show the crosshair
+
+            } else if (point && point1){
                 point.onMouseOver(); // Show the hover marker
                 point1.onMouseOver(); // Show the hover marker
                 chart.tooltip.refresh([point,point1]); // Show the tooltip
@@ -94,13 +109,16 @@ var sidebarPath = "partials/" + PATIENT + ".html";
 
 $("#sidebar").load(sidebarPath); 
 
-// Get the data. The contents of the data file can be viewed at
+// Get the data
 $.getJSON(
-    // 'https://cdn.rawgit.com/highcharts/highcharts/057b672172ccc6c08fe7dbb27fc17ebca3f5b770/samples/data/activity.json',
     jsonFile,
     function (activity) {
         $.each(activity.datasets, function (i, dataset) {
 
+
+            // turns the time frame zoom controls on only for the graph at the top left
+            // since Highcharts requires it to be within a chart and we want it to be 
+            // a universal control
         	var enabled;
         	if (i == 0) {
         		enabled = true;
@@ -119,14 +137,56 @@ $.getJSON(
                 });
             }
 
+            if (dataset.data2) {
+                dataset.data2 = Highcharts.map(dataset.data2, function (val, j) {
+                    return [Date.parse(activity.xData[j]), val];
+                });
+            }
+
             var status_dots = {
                 'green': 'http://www.clker.com/cliparts/r/M/L/o/R/i/green-dot.svg.med.png', 
                 'yellow': 'http://www.clker.com/cliparts/o/b/y/x/Z/c/yellow-dot-md.png',
                 'red': 'http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png'
             }
 
-            var statuses = Object.keys(status_dots)
-            var metric_status = status_dots[statuses[statuses.length * Math.random() << 0]];
+            var metric_status = status_dots[dataset.status];
+
+            var data = {
+                        data: dataset.data,
+                        name: dataset.name,
+                        type: dataset.type,
+                        color: Highcharts.getOptions().colors[0],
+                        fillOpacity: 0.3,
+                        tooltip: {
+                            valueSuffix: ' ' + dataset.unit
+                        },
+                        yAxis: 0,
+                    };
+
+            var data1 = {
+                        data: dataset.data1,
+                        name: dataset.name1,
+                        type: dataset.type1,
+                        color: dataset.type1 == 'area' ? '#205897' : '#123256',
+                        fillOpacity: 0.5,
+                        tooltip: {
+                            valueSuffix: ' ' + dataset.unit1
+                        },
+                         yAxis: dataset.dual ? 1 : 0,
+                    };
+
+            var data2 = {
+                        data: dataset.data2,
+                        name: dataset.name2,
+                        type: dataset.type2,
+                        color: '#123256',
+                        fillOpacity: 0.9,
+                        tooltip: {
+                            valueSuffix: ' ' + dataset.unit2
+                        },
+                         yAxis: dataset.dual ? 1 : 0,
+                         showInLegend: dataset.data2 ? true : false                         
+                    };
             
 
             $('<div class="chart">')
@@ -138,11 +198,11 @@ $.getJSON(
                         spacingBottom: 0,
                         style: {
                             fontFamily: 'Open Sans'
-                        }
+                        },
                     },
                     title: {
                         useHTML: true,
-                        text: "<div class='title_bar'><div class='title'>" + dataset.name + "</div><img class='status' src='"+ metric_status +"'/></div>",
+                        text: "<div class='title_bar'><div class='title'>" + dataset.title + "</div><img class='status' src='"+ metric_status +"'/></div>",
                         align: 'left',
                         x: 50,
                         style: {
@@ -171,7 +231,13 @@ $.getJSON(
                         enabled: false
                     },
                     legend: {
-                        enabled: dataset.dual
+                        enabled: dataset.legend,
+                        title: {
+                            text: '<span style="font-size: 9px; color: #666; font-weight: normal">(Click a line to hide it)</span>',
+                            style: {
+                                fontStyle: 'italic'
+                            }
+                        }
                     },
                     xAxis: {
                         crosshair: true,
@@ -183,13 +249,18 @@ $.getJSON(
 						   	format: '{value:%m/%d}'
 	                	},
 	                },
+                    plotOptions: {
+                        series: {
+                            stacking: 'normal'
+                        }
+                    },
                     yAxis: [{
                         title: {
-                            text: dataset.name
+                            text: dataset.unit
                         }
                     }, {
                         title: {
-                            text: dataset.name1 || null
+                            text: dataset.dual ? dataset.unit1 : null
                         },
                         opposite: true
                     }],
@@ -197,43 +268,29 @@ $.getJSON(
                         positioner: function () {
                             return {
                                 // right aligned
-                                x: this.chart.chartWidth - this.label.width - 40, 
-                                y: dataset.dual ? 60 : 80 // align to title
+                                x: this.chart.chartWidth - this.label.width - 30, 
+                                y: dataset.shared ? 70 : 60 // align to title
                             };
                         },
-                        shared: dataset.dual,
+                        shared: dataset.shared,
                         borderWidth: 0,
                         backgroundColor: 'none',
-                        pointFormat: '<tr><td>{point.y}</td></tr><br/>',
-                        headerFormat: '',
+                        useHTML: true,
+                        headerFormat: '<table>',
+                        pointFormat: '<tr class="tooltip"><td>{series.name}</br><b style="font-size:14px;">{point.y}</b></td></tr>',
+                        footerFormat: '</table>',
                         shadow: false,
                         style: {
-                            fontSize: '16px'
+                            fontSize: '10px',
                         },
                         valueDecimals: dataset.valueDecimals
                     },
-                    series: [{
-                        data: dataset.data,
-                        name: dataset.name,
-                        type: dataset.type,
-                        color: Highcharts.getOptions().colors[0],
-                        fillOpacity: 0.3,
-                        tooltip: {
-                            valueSuffix: ' ' + dataset.unit
-                        },
-                        yAxis: 0,
-                    },
-                    {
-                        data: dataset.data1,
-                        name: dataset.name1,
-                        type: dataset.type1,
-                        color: Highcharts.getOptions().colors[i],
-                        fillOpacity: 0.3,
-                        tooltip: {
-                            valueSuffix: ' ' + dataset.unit1
-                        },
-                         yAxis: 1,
-                    }] 
+                    series: [
+                        data,
+                        data1,
+                        data2
+                    ] 
+
                 }, function (chart) {
 
                     // apply the date pickers
