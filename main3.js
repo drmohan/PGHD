@@ -7,7 +7,7 @@ mouse/touch event handler to bind the charts together.
 
 
 // ****** CHANGE PATIENT HERE TO INDICATE PROFILE OF CHOICE ********
-var PATIENT = "patient1";
+var PATIENT = "patient3";
 
 
 /**
