@@ -257,7 +257,9 @@ $.getJSON(
                     yAxis: [{
                         title: {
                             text: dataset.unit
-                        }
+                        },
+                        ceiling: dataset.unit == 'hours' ? 25 : null,
+                        endOnTick: dataset.unit == 'hours' ? false : true   
                     }, {
                         title: {
                             text: dataset.dual ? dataset.unit1 : null
