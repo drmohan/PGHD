@@ -120,7 +120,7 @@ $.getJSON(
             // since Highcharts requires it to be within a chart and we want it to be 
             // a universal control
         	var enabled;
-        	if (i == 0) {
+        	if (i == 1) {
         		enabled = true;
         	} else {
         		enabled = false;
@@ -199,6 +199,7 @@ $.getJSON(
                         style: {
                             fontFamily: 'Open Sans'
                         },
+                        backgroundColor: 'none'
                     },
                     title: {
                         useHTML: true,
@@ -213,6 +214,22 @@ $.getJSON(
                     	floating: true,
 			            y: -120,
 			            verticalAlign: 'top',
+                        inputStyle: {
+                            color: 'white',
+                            fontWeight: 'bold'
+                        },
+                        labelStyle: {
+                            color: 'white',
+                            fontWeight: 'bold'
+                        },
+                        inputPosition: {
+                            align: 'left',
+                            x: -50
+                        },
+                        buttonPosition: {
+                            align: 'right',
+                            x: -50
+                        },
                     	buttons: [{
 						    type: 'week',
 						    count: 1,

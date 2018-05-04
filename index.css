@@ -1,6 +1,6 @@
 .nav {
 	position: fixed;
-	width: 200px;
+	width: 225px;
 	height: 100%;
 	left: 0;
 	top: 0;
@@ -8,12 +8,34 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	z-index: 1000;
 }
 
 
 .sidebar { 
 	text-align: left;
 	padding: 0px 15px;
+}
+
+.wrapper {
+	position: relative;
+}
+
+.divider {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	top: -10px;
+	left: 10px;
+	width: 100%;
+	height: 80px;
+	background-color: #5d6e7f;
+}
+
+.logo {
+	width: 50px;
+	height: 50px;
+	margin-left: 220px;
 }
 
 .patient_image {
@@ -25,20 +47,49 @@
 .patient_info {
 	font-family: 'Open Sans', sans-serif;
 	color: white;
-	font-size: 12px;
+	font-size: 0.8em;
 }
 
 .patient_name {
-	font-size: 16px;
+	font-size: 1em;
+	font-weight: bold;
 }
 
 .chart {
-    width: 44%;
-    height: 330px;
+    width: 45%;
+    height: 400px;
     margin-left: 3%;
     padding-top: 1%;
-
 }
+
+@media screen and (max-width: 1439px) {
+	.chart {
+	    height: 330px;
+	}
+
+	.nav {
+		width: 200px;
+	}
+}
+
+@media screen and (max-width: 1365px) {
+	.chart {
+	    width: 100%;
+	    height: 330px;
+	    margin-left: 3%;
+	    padding-top: 1%;
+	}
+
+	.highcharts-range-selector-group {
+		display: none;
+	}
+
+	.nav {
+		width: 200px;
+	}
+}
+
+
 
 #container {
 	display: flex;
