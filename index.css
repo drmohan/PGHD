@@ -35,7 +35,7 @@
 .logo {
 	width: 50px;
 	height: 50px;
-	margin-left: 220px;
+	margin-left: 245px;
 }
 
 .patient_image {
@@ -70,6 +70,10 @@
 	.nav {
 		width: 200px;
 	}
+
+	.logo {
+		margin-left: 220px;
+	}
 }
 
 @media screen and (max-width: 1300px) {
@@ -86,6 +90,10 @@
 
 	.nav {
 		width: 200px;
+	}
+
+	.logo {
+		margin-left: 220px;
 	}
 }
 

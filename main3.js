@@ -27,9 +27,9 @@ var PATIENT = "patient3";
             chart = Highcharts.charts[i];
             e = chart.pointer.normalize(e); 
             if (e.chartX > chart.xAxis[0].pos && e.chartX < chart.xAxis[0].pos + chart.xAxis[0].len) {
-            	break;
+                break;
             }
-		}
+        }
         for (i = 0; i < Highcharts.charts.length; i = i + 1) {
             chart = Highcharts.charts[i];
             point = chart.series[0].searchPoint(e, true); // Get the hovered point
@@ -119,12 +119,12 @@ $.getJSON(
             // turns the time frame zoom controls on only for the graph at the top left
             // since Highcharts requires it to be within a chart and we want it to be 
             // a universal control
-        	var enabled;
-        	if (i == 0) {
-        		enabled = true;
-        	} else {
-        		enabled = false;
-        	}
+            var enabled;
+            if (i == 1) {
+                enabled = true;
+            } else {
+                enabled = false;
+            }
 
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -199,6 +199,7 @@ $.getJSON(
                         style: {
                             fontFamily: 'Open Sans'
                         },
+                        backgroundColor: 'none'
                     },
                     title: {
                         useHTML: true,
@@ -209,24 +210,40 @@ $.getJSON(
                         }
                     },
                     rangeSelector: {
-                    	enabled: enabled,
-                    	floating: true,
-			            y: -120,
-			            verticalAlign: 'top',
-                    	buttons: [{
-						    type: 'week',
-						    count: 1,
-						    text: '1w'
-						}, {
-						    type: 'week',
-						    count: 2,
-						    text: '2w'
-						}, {
-						    type: 'all',
-						    text: 'All'
-						}],
+                        enabled: enabled,
+                        floating: true,
+                        y: -120,
+                        verticalAlign: 'top',
+                        inputStyle: {
+                            color: 'white',
+                            fontWeight: 'bold'
+                        },
+                        labelStyle: {
+                            color: 'white',
+                            fontWeight: 'bold'
+                        },
+                        inputPosition: {
+                            align: 'left',
+                            x: -50
+                        },
+                        buttonPosition: {
+                            align: 'right',
+                            x: -50
+                        },
+                        buttons: [{
+                            type: 'week',
+                            count: 1,
+                            text: '1w'
+                        }, {
+                            type: 'week',
+                            count: 2,
+                            text: '2w'
+                        }, {
+                            type: 'all',
+                            text: 'All'
+                        }],
 
-			        },
+                    },
                     credits: {
                         enabled: false
                     },
@@ -244,11 +261,11 @@ $.getJSON(
                         events: {
                             setExtremes: syncExtremes
                         },
-	                    type: 'datetime',
-						labels: {
-						   	format: '{value:%m/%d}'
-	                	},
-	                },
+                        type: 'datetime',
+                        labels: {
+                            format: '{value:%m/%d}'
+                        },
+                    },
                     plotOptions: {
                         series: {
                             stacking: 'normal'
