@@ -250,7 +250,7 @@ $.getJSON(
                     legend: {
                         enabled: dataset.legend,
                         title: {
-                            text: '<span style="font-size: 9px; color: #666; font-weight: normal">(Click a line to hide it)</span>',
+                            text: '<span style="font-size: 9px; color: #666; font-weight: normal">(Click to hide)</span>',
                             style: {
                                 fontStyle: 'italic'
                             }
